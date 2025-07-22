@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else {
           setUser(userData);
         }
-      } catch (error) {
+      } catch {
         localStorage.removeItem('openBedUser');
         setUser(null);
       }
@@ -58,30 +58,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Check credentials
-        if ((email === 'hospital-admin@openbed.com' || email === 'rehab-admin@openbed.com') && password === 'admin123') {
-          const userType = email.includes('hospital') ? 'hospital' : 'rehab';
-          const userData: User = {
-            email: email,
-            type: userType,
-            name: userType === 'hospital' ? 'Sarah Johnson' : 'Michael Davis',
-            role: userType === 'hospital' ? 'Hospital Administrator' : 'Rehabilitation Director',
-            loggedIn: true,
-            timestamp: new Date().toISOString()
-          };
-          
-          localStorage.setItem('openBedUser', JSON.stringify(userData));
-          setUser(userData);
-          resolve({ success: true });
-        } else {
-          resolve({ success: false, error: 'Invalid email or password. Please try again.' });
-        }
-      }, 1000);
-    });
+  const login = async (email: string) => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock user data based on email
+      const mockUser: User = {
+        email,
+        name: email.split('@')[0],
+        type: email.includes('hospital') ? 'hospital' : 'rehab',
+        role: email.includes('hospital') ? 'Hospital Administrator' : 'Rehabilitation Director',
+        loggedIn: true,
+        timestamp: new Date().toISOString()
+      };
+      
+      setUser(mockUser);
+      return { success: true };
+    } catch {
+      return { success: false, error: 'Login failed' };
+    }
   };
 
   const logout = () => {

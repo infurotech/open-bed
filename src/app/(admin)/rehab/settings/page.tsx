@@ -223,12 +223,19 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Location Map
                       </label>
-                      <Map 
-                        address={facility.address}
-                        city={facility.city}
-                        state={facility.state}
-                        zipCode={facility.zipCode}
-                      />
+                      <div className="h-64 rounded-lg overflow-hidden">
+                        <Map 
+                          center={{ lat: 39.7447, lng: -75.5484 }} // Default to Wilmington, DE
+                          markers={[
+                            {
+                              id: "facility",
+                              title: facility.name,
+                              lat: 39.7447,
+                              lng: -75.5484
+                            }
+                          ]}
+                        />
+                      </div>
                       <div className="mt-2 text-center">
                         <a 
                           href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(`${facility.address}, ${facility.city}, ${facility.state} ${facility.zipCode}`)}`}

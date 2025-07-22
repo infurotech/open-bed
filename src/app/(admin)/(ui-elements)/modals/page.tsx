@@ -1,4 +1,3 @@
-import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import DefaultModal from "@/components/example/ModalExample/DefaultModal";
 import FormInModal from "@/components/example/ModalExample/FormInModal";
@@ -17,12 +16,12 @@ export default function Modals() {
   return (
     <div>
       <PageBreadcrumb pageTitle="Modals" />
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2 xl:gap-6">
+      <div className="space-y-5 sm:space-y-6">
         <DefaultModal />
-        <VerticallyCenteredModal />
         <FormInModal />
         <FullScreenModal />
         <ModalBasedAlerts />
+        <VerticallyCenteredModal />
       </div>
     </div>
   );

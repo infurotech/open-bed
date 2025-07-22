@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Badge from "@/components/ui/badge/Badge";
+import Button from "@/components/ui/button/Button";
 import {
   Table,
   TableBody,
@@ -244,6 +246,12 @@ export default function BookingRequestsPage() {
                     >
                       Price/Day
                     </TableCell>
+                    <TableCell
+                      isHeader
+                      className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                    >
+                      Actions
+                    </TableCell>
                   </TableRow>
                 </TableHeader>
 
@@ -260,9 +268,11 @@ export default function BookingRequestsPage() {
                           onClick={() => handleRequestClick(request.id)}
                         >
                           <div className="w-10 h-10 overflow-hidden rounded-full">
-                            <img
+                            <Image
                               src={request.patientImage}
                               alt={request.patientName}
+                              width={40}
+                              height={40}
                               className="w-full h-full object-cover"
                             />
                           </div>
@@ -319,6 +329,15 @@ export default function BookingRequestsPage() {
                           </span>
                         </div>
                       </TableCell>
+                      <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleRequestClick(request.id)}
+                        >
+                          View Details
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -333,7 +352,7 @@ export default function BookingRequestsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No booking requests</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">You haven't made any booking requests yet.</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">You have not made any booking requests yet.</p>
             <button
               onClick={() => router.push('/search-rehab')}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"

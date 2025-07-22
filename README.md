@@ -2,8 +2,6 @@
 
 Open Bed is a modern, feature-rich hospital and rehabilitation center management dashboard built with **Next.js** and **Tailwind CSS**. It provides healthcare facilities with a comprehensive platform for bed management, patient tracking, admissions, discharges, and operational analytics.
 
-![Open Bed - Dashboard Preview](./banner.png)
-
 With Open Bed, you get access to all the necessary dashboard UI components, elements, and pages required to build a high-quality and complete healthcare management system. Whether you're managing a hospital, rehabilitation center, or multi-facility network, Open Bed streamlines your operations and improves patient care.
 
 Open Bed utilizes the powerful features of **Next.js 15** and common features such as server-side rendering (SSR), static site generation (SSG), and seamless API route integration. Combined with the advancements of **React 19** and the robustness of **TypeScript**, Open Bed is the perfect solution to help get your healthcare project up and running quickly.

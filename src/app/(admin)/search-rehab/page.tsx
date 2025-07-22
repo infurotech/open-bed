@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Badge from "@/components/ui/badge/Badge";
 import Map from "@/components/Map";
@@ -48,7 +49,6 @@ export default function SearchRehabPage() {
   const [maxDistance, setMaxDistance] = useState<number>(50);
   const [minAvailableBeds, setMinAvailableBeds] = useState<number>(0);
   const [currentLocation] = useState({ lat: 39.7447, lng: -75.5484 }); // Wilmington, DE
-  const [selectedRehab, setSelectedRehab] = useState<RehabCenter | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -364,17 +364,15 @@ export default function SearchRehabPage() {
                 {paginatedRehabs.map(rehab => (
                   <div
                     key={rehab.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      selectedRehab?.id === rehab.id
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'
-                    }`}
+                    className={`p-4 border rounded-lg cursor-pointer transition-colors border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700`}
                     onClick={() => router.push(`/rehab/${rehab.id}`)}
                   >
                     <div className="flex items-start gap-4">
-                      <img
+                      <Image
                         src={rehab.image}
                         alt={rehab.name}
+                        width={64}
+                        height={64}
                         className="w-16 h-16 rounded-lg object-cover"
                       />
                       <div className="flex-1">
@@ -443,16 +441,14 @@ export default function SearchRehabPage() {
                 {paginatedRehabs.map(rehab => (
                   <div
                     key={rehab.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                      selectedRehab?.id === rehab.id
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700'
-                    }`}
+                    className={`p-4 border rounded-lg cursor-pointer transition-colors border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700`}
                     onClick={() => router.push(`/rehab/${rehab.id}`)}
                   >
-                    <img
+                    <Image
                       src={rehab.image}
                       alt={rehab.name}
+                      width={400}
+                      height={128}
                       className="w-full h-32 rounded-lg object-cover mb-3"
                     />
                     <div className="space-y-2">
@@ -568,9 +564,10 @@ export default function SearchRehabPage() {
               <Map 
                 center={currentLocation}
                 markers={filteredRehabs.map(rehab => ({
-                  position: rehab.coordinates,
+                  id: rehab.id,
                   title: rehab.name,
-                  onClick: () => setSelectedRehab(rehab)
+                  lat: rehab.coordinates.lat,
+                  lng: rehab.coordinates.lng
                 }))}
               />
             </div>

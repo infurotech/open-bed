@@ -208,9 +208,7 @@ const servicesData: Service[] = [
 
 export default function BedsServicesPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState('beds');
-  const [selectedBed, setSelectedBed] = useState<Bed | null>(null);
-  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [activeTab, setActiveTab] = useState<'beds' | 'services'>('beds');
   
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -277,14 +275,6 @@ export default function BedsServicesPage() {
     }
   };
 
-  const handleBedClick = (bed: Bed) => {
-    setSelectedBed(bed);
-  };
-
-  const handleServiceClick = (service: Service) => {
-    setSelectedService(service);
-  };
-
   const totalBeds = bedsData.length;
   const availableBeds = bedsData.filter(bed => bed.status === "Available").length;
   const occupiedBeds = bedsData.filter(bed => bed.status === "Occupied").length;
@@ -293,6 +283,14 @@ export default function BedsServicesPage() {
   const totalServices = servicesData.length;
   const activeServices = servicesData.filter(service => service.status === "Active").length;
   const inactiveServices = servicesData.filter(service => service.status === "Inactive").length;
+
+  const handleBedClick = () => {
+    // Handle bed click
+  };
+
+  const handleServiceClick = () => {
+    // Handle service click
+  };
 
   return (
     <ProtectedRoute>
@@ -330,7 +328,7 @@ export default function BedsServicesPage() {
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => setActiveTab(tab.id as 'beds' | 'services')}
                   className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center gap-2 ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600 dark:text-blue-400'
@@ -477,7 +475,7 @@ export default function BedsServicesPage() {
                       <TableCell className="px-5 py-4 sm:px-6 text-start">
                               <span 
                                 className="font-medium text-gray-800 text-theme-sm dark:text-white/90 cursor-pointer hover:text-blue-600"
-                                onClick={() => handleBedClick(bed)}
+                                onClick={() => handleBedClick()}
                               >
                                 {bed.bedNumber}
                               </span>
@@ -669,7 +667,7 @@ export default function BedsServicesPage() {
                               <div>
                                 <span 
                                   className="block font-medium text-gray-800 text-theme-sm dark:text-white/90 cursor-pointer hover:text-blue-600"
-                                  onClick={() => handleServiceClick(service)}
+                                  onClick={() => handleServiceClick()}
                                 >
                                   {service.name}
                                 </span>

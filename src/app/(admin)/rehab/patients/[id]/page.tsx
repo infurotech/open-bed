@@ -278,7 +278,7 @@ export default function RehabPatientDetailPage({ params }: { params: Promise<{ i
               {/* Today's Schedule */}
               <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
                 <h3 className="mb-4 text-lg font-semibold text-black dark:text-white">
-                  Today's Schedule
+                  Schedule for Today
                 </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">

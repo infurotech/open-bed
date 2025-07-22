@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Badge from "@/components/ui/badge/Badge";
 import Map from "@/components/Map";
@@ -64,7 +65,7 @@ const bedTypes = [
   {
     id: "3",
     name: "Shared Room (2 beds)",
-    description: "Shared room with two beds, cost-effective option for patients who don't mind sharing space. Great for social interaction during recovery.",
+    description: "Shared room with two beds, cost-effective option for patients who don&apos;t mind sharing space. Great for social interaction during recovery.",
     price: 100,
     available: 5,
     total: 15,
@@ -180,10 +181,11 @@ export default function RehabDetailPage() {
               {/* Hero Section */}
               <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
                 <div className="relative h-80">
-                  <img
+                  <Image
                     src={rehab.image}
                     alt={rehab.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute top-4 right-4">
                     <Badge color={getAvailabilityColor(rehab.availableBeds, rehab.totalBeds)} size="md">
@@ -261,11 +263,12 @@ export default function RehabDetailPage() {
                     <div key={bed.id} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                       <div className="flex">
                         {/* Image Section */}
-                        <div className="w-1/3 h-64">
-                          <img
+                        <div className="w-1/3 h-64 relative">
+                          <Image
                             src={bed.image}
                             alt={bed.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                         </div>
                         
@@ -420,8 +423,10 @@ export default function RehabDetailPage() {
                     center={{ lat: rehab.coordinates.lat, lng: rehab.coordinates.lng }}
                     markers={[
                       {
-                        position: { lat: rehab.coordinates.lat, lng: rehab.coordinates.lng },
-                        title: rehab.name
+                        id: rehab.id,
+                        title: rehab.name,
+                        lat: rehab.coordinates.lat,
+                        lng: rehab.coordinates.lng
                       }
                     ]}
                   />

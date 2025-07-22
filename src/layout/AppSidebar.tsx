@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState,useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -7,19 +7,14 @@ import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "../context/AuthContext";
 import {
   BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
   ListIcon,
   OpenBedIcon,
-  PageIcon,
-  PieChartIcon,
   PlugInIcon,
-  TableIcon,
   UserCircleIcon,
 } from "../icons/index";
-import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
   name: string;
@@ -32,11 +27,11 @@ const hospitalNavItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Overview", path: "/", pro: false }],
+    path: "/",
   },
   {
     icon: <OpenBedIcon />,
-    name: "Search Rehab",
+    name: "Search",
     path: "/search-rehab",
   },
   {
@@ -49,13 +44,18 @@ const hospitalNavItems: NavItem[] = [
     name: "Patients",
     path: "/hospital/patients",
   },
+  {
+    icon: <PlugInIcon />,
+    name: "Settings",
+    path: "/hospital/settings",
+  },
 ];
 
 const rehabNavItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Overview", path: "/", pro: false }],
+    path: "/",
   },
   {
     icon: <ListIcon />,
@@ -219,33 +219,29 @@ const AppSidebar: React.FC = () => {
   );
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // const isActive = (path: string) => path === pathname;
-   const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
   useEffect(() => {
-    // Check if the current path matches any submenu item
+    // Check if any submenu item matches the current pathname
     let submenuMatched = false;
-    const currentNavItems = user?.type === 'hospital' ? hospitalNavItems : rehabNavItems;
     
-    currentNavItems.forEach((nav, index) => {
+    const navItems = user?.type === 'hospital' ? hospitalNavItems : rehabNavItems;
+    
+    navItems.forEach((nav, index) => {
       if (nav.subItems) {
-        nav.subItems.forEach((subItem) => {
-          if (isActive(subItem.path)) {
-            setOpenSubmenu({
-              type: "main",
-              index,
-            });
-            submenuMatched = true;
-          }
-        });
+        const hasActiveSubItem = nav.subItems.some(subItem => isActive(subItem.path));
+        if (hasActiveSubItem) {
+          setOpenSubmenu({ type: "main", index });
+          submenuMatched = true;
+        }
       }
     });
-
+    
     // If no submenu item matches, close the open submenu
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
-  }, [pathname,isActive]);
+  }, [pathname, isActive, user?.type]);
 
   useEffect(() => {
     // Set the height of the submenu items when the submenu is opened
@@ -293,14 +289,22 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isMobileOpen ? (
             <>
               <div className="flex items-center gap-3">
-                <img src="/images/logo/open-bed.png" alt="Open Bed" className="w-12 h-12" />
+                <Image 
+                  src="/images/logo/open-bed.png" 
+                  alt="Open Bed" 
+                  width={48}
+                  height={48}
+                  className="w-12 h-12" 
+                />
                 <span className="text-xl font-bold text-gray-800 dark:text-white">Open Bed</span>
               </div>
             </>
                       ) : (
-              <img
+              <Image
                 src="/images/logo/open-bed.png"
                 alt="Open Bed"
+                width={40}
+                height={40}
                 className="w-10 h-10"
               />
             )}

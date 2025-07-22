@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
@@ -26,7 +27,7 @@ export default function LoginPage() {
       } else {
         setErrorMessage(result.error || 'Login failed');
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('An error occurred during login');
     } finally {
       setIsLoading(false);
@@ -41,7 +42,13 @@ export default function LoginPage() {
           {/* Logo and Title */}
           <div className="mb-8 text-center">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-500/10">
-              <img src="/images/logo/open-bed.png" alt="Open Bed" className="h-16 w-16" />
+              <Image 
+                src="/images/logo/open-bed.png" 
+                alt="Open Bed" 
+                width={64}
+                height={64}
+                className="h-16 w-16" 
+              />
             </div>
             <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
               Welcome to Open Bed

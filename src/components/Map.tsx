@@ -1,37 +1,77 @@
 "use client";
 
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
-// Fix for default markers in react-leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
-
-interface MarkerData {
-  position: { lat: number; lng: number };
-  title: string;
-  onClick?: () => void;
-}
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 interface MapProps {
-  center: { lat: number; lng: number };
-  markers?: MarkerData[];
+  markers: Array<{
+    id: string;
+    title: string;
+    lat: number;
+    lng: number;
+  }>;
+  center?: { lat: number; lng: number };
+  zoom?: number;
 }
 
-export default function Map({ center, markers = [] }: MapProps) {
-  const centerPosition: [number, number] = [center.lat, center.lng];
+// Dynamically import react-leaflet components to prevent SSR issues
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+
+const Marker = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+const Popup = dynamic(
+  () => import('react-leaflet').then((mod) => mod.Popup),
+  { ssr: false }
+);
+
+const Map: React.FC<MapProps> = ({ markers, center, zoom = 12 }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    // Import Leaflet CSS only on client side
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css';
+    document.head.appendChild(link);
+    
+    // Fix for default markers in react-leaflet
+    import('leaflet').then((L) => {
+      delete (L.default.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
+      L.default.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      });
+    });
+  }, []);
+
+  const centerPosition: [number, number] = [center?.lat || 0, center?.lng || 0];
+
+  if (!isClient) {
+    return (
+      <div className="h-full w-full rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+        <div className="text-gray-500 dark:text-gray-400">Loading map...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full w-full rounded-lg overflow-hidden">
       <MapContainer
         center={centerPosition}
-        zoom={10}
+        zoom={zoom}
         style={{ height: '100%', width: '100%' }}
         className="rounded-lg"
         scrollWheelZoom={true}
@@ -43,19 +83,16 @@ export default function Map({ center, markers = [] }: MapProps) {
         {markers.map((marker, index) => (
           <Marker 
             key={index} 
-            position={[marker.position.lat, marker.position.lng]}
-            eventHandlers={{
-              click: () => marker.onClick?.(),
-            }}
+            position={[marker.lat, marker.lng]}
           >
             <Popup>
-              <div className="text-center">
-                <div className="font-semibold text-gray-800">{marker.title}</div>
-              </div>
+              <div className="font-semibold text-gray-800">{marker.title}</div>
             </Popup>
           </Marker>
         ))}
       </MapContainer>
     </div>
   );
-} 
+};
+
+export default Map; 

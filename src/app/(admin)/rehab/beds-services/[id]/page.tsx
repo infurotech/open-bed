@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Badge from "@/components/ui/badge/Badge";
 import Button from "@/components/ui/button/Button";
-import Image from "next/image";
 
 interface Bed {
   id: string;
